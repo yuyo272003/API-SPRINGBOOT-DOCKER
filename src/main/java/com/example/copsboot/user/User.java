@@ -1,3 +1,4 @@
+// Clase que contiene todas las propiedades de los usuarios
 package com.example.copsboot.user;
 import java.util.Set;
 import java.util.UUID;
@@ -11,18 +12,34 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 
-@Entity
+@Entity /*
+(que representa una tabla en una base de datos)
+marca la clase como una entidad que puede guardar y gestionar en la base de datos automáticamente (persistencia)
+Convierte la clase en una entidad, que puede guardar, leer, actualizar y borrarla de la base de datos
+Los atributos de la clase son las columnas
+
+*/
+
 @Table(name = "copsboot_user")
+/*
+Es opcional, permite asignar explicitamente el nombre de la tabla. Si no se especifica el nombre, Spring boot le asignará el nombre de la clase con snake_case
+*/ 
 public class User {
     @Id
     private UUID id;
+    /* Define la llave primaria de la entidad */
     private String email;
+    
     private String password;
 
      @ElementCollection(fetch = FetchType.EAGER)
-     @Enumerated(EnumType.STRING)
+     @Enumerated(EnumType.STRING) // Se asegura de que los calores almacenados sean de tipo String
      @NotNull
     private Set<UserRole> roles;
+    /* El campo roles es una colección de valores enum */
+
+    protected User(){}
+    /* Hibernate necesita un constructor sin argumentos, así que agregamos este, no necesita ser público */
     
     public User(UUID id, String email, String password, Set<UserRole> roles) {
         this.id = id;
