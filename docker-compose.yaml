@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  identity:
+  keycloak:
     image: quay.io/keycloak/keycloak:22.0.1
     command: start-dev --import-realm
     ports:
@@ -9,7 +9,19 @@ services:
     environment:
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin-secret
-      KC_HOSTNAME: localhost
+      KC_HOSTNAME: keycloak
       KC_HEALTH_ENABLED: "true"
       KC_METRICS_ENABLED: "true"
-      KEYCLOAK_LOGLEVEL: INFO
+
+  api:
+    build: .
+    ports:
+      - "8888:8888"
+    environment:
+      # Ajusta si tu app los lee
+      SPRING_PROFILES_ACTIVE: default
+      SERVER_PORT: 8888
+      # URL de Keycloak para validar tokens
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: http://keycloak:8080/realms/copsboot
+    depends_on:
+      - keycloak

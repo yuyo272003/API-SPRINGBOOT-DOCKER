@@ -11,5 +11,9 @@ public class UserId extends AbstractEntityId<UUID> {
     public UserId(UUID id) {
         super(id);
     }
-    
+
+    @Override
+    public String asString() {
+        return "";
+    }
 }
